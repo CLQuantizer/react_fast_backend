@@ -123,4 +123,4 @@ def test_read_all_journals():
 def test_():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"msg": "Hello World"}
+    assert response.json() == {"msg": "Hello World\n"}
