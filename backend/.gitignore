@@ -1,0 +1,7 @@
+__pycache__/*
+users/__pycache__
+poetry.lock
+users/__pycache__/*
+.vscode/*
+*.log
+*.lock
