@@ -20,6 +20,7 @@ logger.addHandler(console_handler)
 
 origins = [
     "http://139.162.225.136",
+    "http://langedev.net:80",
     "http://langedev.net",
     "http://langedev.net:3000",
     "http://localhost:3000",
@@ -48,7 +49,7 @@ async def related(Word):
     # read the word
     word = Word.lower().strip()
     # query redis
-    redis_res = await r.get(word)
+    redis_res = r.get(word)
     if redis_res:
         logger.info("going through redis")
         return json.loads(redis_res)
@@ -62,7 +63,7 @@ async def related(Word):
             words = ['Sorry 🥵', 'This input', 'is not a word']
             probs = ['', '\'' + Word + '\'', 'or is too rare for this little app']
             # set the redis entry
-        await r.set(word, json.dumps({'words': words, 'probs': probs}))
+        r.set(word, json.dumps({'words': words, 'probs': probs}))
         return {'words': words, 'probs': probs}
 
 
