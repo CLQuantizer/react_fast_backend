@@ -1,0 +1,1 @@
+## Never start a poetry prj witout a readme
