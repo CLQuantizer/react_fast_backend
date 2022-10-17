@@ -63,7 +63,7 @@ async def related(Word):
             words = ['Sorry 🥵', 'This input', 'is not a word']
             probs = ['', '\'' + Word + '\'', 'or is too rare for this little app']
             # set the redis entry
-        r.set(word, json.dumps({'words': words, 'probs': probs}))
+        r.set(word, json.dumps({'words': words, 'probs': probs}), ex=1800)
         return {'words': words, 'probs': probs}
 
 
