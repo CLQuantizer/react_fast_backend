@@ -20,6 +20,7 @@ class Proc(object):
         totalmem = psutil.virtual_memory().total / 1024 / 1024
         percentage = float(self.mem) / 100
         res = "(" + str(round(totalmem * percentage, 1)) + "M)"
+        hours = self.time.split(":")[0] + "h"
         # returns a string containing minimalistic info about hte process:
         # user, pid, command
-        return 'pid: %s up time: %s mem consumption: %s%% %s' % (self.pid, self.time, self.mem, res)
+        return 'pid: %s up time: %s mem consumption: %s%% %s' % (self.pid, hours, self.mem, res)
