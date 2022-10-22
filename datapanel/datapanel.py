@@ -1,13 +1,12 @@
-from subprocess import Popen, PIPE
 from re import split
+from subprocess import Popen, PIPE
+
+import redis
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import HTMLResponse
 
 from pyprocessor import Proc
-from fastapi.middleware.cors import CORSMiddleware
-
-import redis
-import json
 
 app = FastAPI()
 
@@ -54,14 +53,14 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/services/{service}")
-async def say_hello(service: str):
-    if service not in SAFE_LIST:
+@app.get("/services/{name}")
+async def query_service(name: str):
+    if name not in SAFE_LIST:
         content = "you think too much"
         return HTMLResponse(content=content, status_code=404)
-    proc_list = filter_proc(get_proc_list(), service)
+    services = filter_proc(get_proc_list(), name)
     # show the nominal proc list
-    return {service: [proc.to_str() for proc in proc_list]}
+    return {"name": name, "services": [service.to_str() for service in services]}
 
 
 @app.get("/rediskeys")
