@@ -10,7 +10,7 @@ from pyprocessor import Proc
 
 app = FastAPI()
 
-SAFE_LIST = ["uvicorn", "pm2", "redis", "kafka", "zookeeper", "pycharm", "npm"]
+SAFE_LIST = ["uvicorn", "pm2", "redis", "kafka", "zookeeper", "postgres", "npm"]
 
 origins = [
     "http://139.162.225.136",
