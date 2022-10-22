@@ -1,6 +1,8 @@
 from subprocess import Popen, PIPE
 from re import split
 from fastapi import FastAPI
+from starlette.responses import HTMLResponse
+
 from pyprocessor import Proc
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -9,7 +11,7 @@ import json
 
 app = FastAPI()
 
-SAFE_LIST = ["uvicorn", "pm2", "redis", "kafka", "zookeeper", "pycharm"]
+SAFE_LIST = ["uvicorn", "pm2", "redis", "kafka", "zookeeper", "pycharm", "npm"]
 
 origins = [
     "http://139.162.225.136",
@@ -55,7 +57,8 @@ async def root():
 @app.get("/services/{service}")
 async def say_hello(service: str):
     if service not in SAFE_LIST:
-        return "you think too much"
+        content = "you think too much"
+        return HTMLResponse(content=content, status_code=404)
     proc_list = filter_proc(get_proc_list(), service)
     # show the nominal proc list
     return {service: [proc.to_str() for proc in proc_list]}
@@ -75,8 +78,3 @@ async def get_redis_keys():
         keys.append(key)
         ttls.append(ttl)
     return {'keys': keys, 'ttls': ttls}
-
-
-@app.get("/doge")
-async def get_doge_prices():
-    doge = yf.Ticker("DOGE")

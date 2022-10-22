@@ -1,3 +1,6 @@
+import psutil
+
+
 class Proc(object):
     # data structure for a process. The class properties are process attributes
     def __init__(self, proc_info):
@@ -14,7 +17,9 @@ class Proc(object):
         self.cmd = proc_info[10]
 
     def to_str(self):
+        totalmem = psutil.virtual_memory().total / 1024 / 1024
+        percentage = float(self.mem) / 100
+        res = "(" + str(round(totalmem * percentage, 1)) + "M)"
         # returns a string containing minimalistic info about hte process:
         # user, pid, command
-        return '%s %s %s' % (self.pid, self.time, self.cmd[-50:])
-
+        return 'pid: %s up time: %s mem consumption: %s%% %s' % (self.pid, self.time, self.mem, res)
