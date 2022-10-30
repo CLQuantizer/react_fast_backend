@@ -11,7 +11,7 @@ from pyprocessor import Proc
 app = FastAPI()
 
 SAFE_LIST = ["pm2", "redis", "postgres", "uvicorn", "rabbit", "celery"]
-
+CELERY_TASK = "celery-task-meta-"
 origins = [
     "http://139.162.225.136",
     "http://langedev.net:80",
@@ -73,6 +73,12 @@ async def get_redis_keys():
         ttl = r.ttl(key)
         if ttl == -1:
             r.delete(key)
+            continue
+        if key.startswith(CELERY_TASK):
+            if ttl < 100:
+                continue
+            else:
+                r.set(key, "foo", 100)
             continue
         keys.append(key)
         ttls.append(ttl)
