@@ -1,3 +1,4 @@
+import json
 import logging
 
 import redis
@@ -6,7 +7,12 @@ from starlette.middleware.cors import CORSMiddleware
 
 from tasks import get_definition
 
+ERROR_MESSAGE = {'title': 'No Definitions Found',
+                 'message': 'Sorry pal, we couldn\'t find definitions for the word you were looking for.',
+                 'resolution': 'You can try the search again at later time or head to the web instead.'}
+
 infra = FastAPI()
+
 r = redis.Redis()
 
 logger = logging.getLogger(__name__)
@@ -37,13 +43,24 @@ infra.add_middleware(
 )
 
 
-@infra.get("/definition/{word}")
-async def definition(word):
-    celery_async_result = get_definition.delay(word)
-    res = celery_async_result.get()
-    logger.info(res[0]['meanings'][1]['synonyms'])
+@infra.get("/synonyms/{word}")
+async def synonyms(word):
+    redis_key = "def:" + word
+    redis_res = r.get(redis_key)
+    if redis_res:
+        logger.info("going through definition redis")
+        return json.loads(redis_res)
+
+    celery_async_res = get_definition.delay(word)
+    celery_res = celery_async_res.get()
+    if celery_res == ERROR_MESSAGE:
+        r.set(redis_key, json.dumps(ERROR_MESSAGE['title']), ex=300)
+        return ERROR_MESSAGE['title']
+
+    logger.info(celery_res[0]['meanings'][0]['synonyms'])
     syns = []
-    for meaning in res[0]['meanings']:
+    for meaning in celery_res[0]['meanings']:
         for each in meaning['synonyms']:
             syns.append(each)
+    r.set(redis_key, json.dumps(syns), ex=300)
     return sorted(syns, key=len)
