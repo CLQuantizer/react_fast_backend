@@ -55,7 +55,7 @@ async def synonyms(word):
     celery_res = celery_async_res.get()
     if celery_res == ERROR_MESSAGE:
         res = ["Sorry 😢", "No result"]
-        r.set(redis_key, json.dumps(res, ex=300)
+        r.set(redis_key, json.dumps(res, ex=300))
         return ["Sorry 😢", "No result"]
 
     logger.info(celery_res[0]['meanings'][0]['synonyms'])
