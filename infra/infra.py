@@ -62,5 +62,6 @@ async def synonyms(word):
     for meaning in celery_res[0]['meanings']:
         for each in meaning['synonyms']:
             syns.append(each)
+    syns = syns[:15]
     r.set(redis_key, json.dumps(syns), ex=300)
     return sorted(syns, key=len)
