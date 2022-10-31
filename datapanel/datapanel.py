@@ -12,6 +12,7 @@ app = FastAPI()
 
 SAFE_LIST = ["pm2", "redis", "postgres", "uvicorn", "rabbit", "celery", "npm"]
 CELERY_TASK = "celery-task-meta"
+FIVE_MINUTES = 300
 origins = [
     "http://139.162.225.136",
     "http://langedev.net:80",
@@ -74,8 +75,9 @@ async def get_redis_keys():
             r.delete(key)
             continue
         if CELERY_TASK in str(key):
-            if ttl > 100:
-                r.set(key, "foo", ex=100)
+            if ttl > FIVE_MINUTES:
+                ttl = FIVE_MINUTES
+                r.set(key, "foo", ex=FIVE_MINUTES)
         keys.append(key)
         ttls.append(ttl)
     return {'keys': keys, 'ttls': ttls}
