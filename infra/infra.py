@@ -7,6 +7,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from tasks import get_definition
 
+FIVE_MINUTES = 300
 ERROR_MESSAGE = {'title': 'No Definitions Found',
                  'message': 'Sorry pal, we couldn\'t find definitions for the word you were looking for.',
                  'resolution': 'You can try the search again at later time or head to the web instead.'}
@@ -55,7 +56,7 @@ async def synonyms(word):
     celery_res = celery_async_res.get()
     if celery_res == ERROR_MESSAGE:
         res = ["Sorry 😢", "No result"]
-        r.set(redis_key, json.dumps(res), ex=300)
+        r.set(redis_key, json.dumps(res), ex=FIVE_MINUTES)
         return ["Sorry 😢", "No result"]
 
     logger.info(celery_res[0]['meanings'][0]['synonyms'])
@@ -63,6 +64,6 @@ async def synonyms(word):
     for meaning in celery_res[0]['meanings']:
         for each in meaning['synonyms']:
             syns.append(each)
-    syns = syns[:15]
-    r.set(redis_key, json.dumps(syns), ex=300)
-    return sorted(syns, key=len)
+    syns = sorted(syns[:15], key=len)
+    r.set(redis_key, json.dumps(syns), ex=FIVE_MINUTES*2.2)
+    return syns
