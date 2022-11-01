@@ -1,0 +1,1 @@
+uvicorn glove:glove_app --reload --port=8001 &

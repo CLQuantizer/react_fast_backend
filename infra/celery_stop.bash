@@ -1,1 +1,1 @@
-ps auxww | grep 'celery' | awk '{print $2}' | xargs kill -9
+ps auxww | grep 'celery -A tasks worker' | awk '{print $2}' | xargs kill -9

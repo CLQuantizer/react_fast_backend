@@ -1,0 +1,1 @@
+uvicorn datapanel:app --reload --port=8003 &

@@ -11,6 +11,6 @@ for dir in */; do
     then
       poetry run celery -A tasks worker --loglevel=INFO &
     fi
-    poetry run bash run.bash
+    poetry run bash dev.bash
   )
 done

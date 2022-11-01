@@ -1,0 +1,1 @@
+uvicorn journal:app --reload --port=8000 &
