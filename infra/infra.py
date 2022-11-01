@@ -65,5 +65,5 @@ async def synonyms(word):
         for each in meaning['synonyms']:
             syns.append(each)
     syns = sorted(syns[:15], key=len)
-    r.set(redis_key, json.dumps(syns), ex=FIVE_MINUTES*2.2)
+    r.set(redis_key, json.dumps(syns), ex=1300)
     return syns
