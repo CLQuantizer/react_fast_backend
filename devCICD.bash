@@ -7,6 +7,7 @@ kill $(ps aux | grep "celery -A tasks worker" | awk '{print $2}')
 for dir in */; do
   (
     cd "$dir" || exit
+    poetry update package
     if [[ "$dir" == *infra/ ]]
     then
       poetry run celery -A tasks worker --loglevel=INFO &
