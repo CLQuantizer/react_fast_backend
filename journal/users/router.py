@@ -1,15 +1,16 @@
+from datetime import datetime, timedelta
 from typing import Union
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import (
     OAuth2PasswordBearer,
     OAuth2PasswordRequestForm,
     SecurityScopes,
 )
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
 from jose import JWTError, jwt
-from pydantic import ValidationError
-from datetime import datetime, timedelta
 from passlib.context import CryptContext
+from pydantic import ValidationError
+from sqlalchemy.orm import Session
 
 from . import models, schemas
 from .database import (
@@ -166,6 +167,12 @@ async def read_all_journals(db: Session = Depends(get_db)):
                 response_description="All journals data for a user")
 async def read_journals_of_a_user(user: schemas.UserBase = Depends(get_current_user), db: Session = Depends(get_db)):
     return get_user_journals(db=db, username=user.username)
+
+
+@userRouter.get("/journal/{title}", response_model=schemas.Journal,
+                response_description="get one journal for validating creation")
+async def read_journal_by_title(title: str, db: Session = Depends(get_db)):
+    return get_journal_by_title(title=title, db=db)
 
 
 @userRouter.delete("/write/", response_model=schemas.User, response_description="Single user data deleted")

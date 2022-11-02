@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+
 from .journal import app
 
 client = TestClient(app)
@@ -68,6 +69,12 @@ def test_get_journals():
     assert response.status_code == 200
     for each in response.json():
         assert len(each) == 5
+
+
+def test_get_journal_by_title():
+    response = client.get("/users/journal/test")
+    assert response.status_code == 200
+    assert response.json()['title'] == 'test'
 
 
 def test_update_journal():
