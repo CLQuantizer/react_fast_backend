@@ -5,7 +5,7 @@ import redis
 import logging
 
 app = FastAPI()
-app.include_router(userRouter, tags=["User"], prefix="/users")
+app.include_router(userRouter, tags=["User"], prefix="/api/journal/users")
 
 r = redis.Redis(host="localhost")
 
@@ -36,6 +36,6 @@ app.add_middleware(
 )
 
 
-@app.get("/")
+@app.get("/api/journal")
 async def read_main():
     return {"msg": "Hello World\n"}

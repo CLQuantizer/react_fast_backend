@@ -44,7 +44,7 @@ infra.add_middleware(
 )
 
 
-@infra.get("/synonyms/{word}")
+@infra.get("/api/infra/synonyms/{word}")
 async def synonyms(word):
     redis_key = "def:" + word
     redis_res = r.get(redis_key)

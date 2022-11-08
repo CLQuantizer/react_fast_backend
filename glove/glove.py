@@ -44,7 +44,7 @@ with open('glove50', 'rb') as f:
     glove_vectors = pickle.load(f)
 
 
-@glove_app.get("/related/{Word}")
+@glove_app.get("/api/word/related/{Word}")
 async def related(Word):
     # read the word
     word = Word.lower().strip()
@@ -67,7 +67,7 @@ async def related(Word):
         return {'words': words, 'probs': probs}
 
 
-@glove_app.get("/related/")
+@glove_app.get("/api/word/related/")
 async def related():
     words = ['Sorry 🥵', 'Please input']
     probs = ['', 'something']

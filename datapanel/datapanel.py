@@ -49,12 +49,12 @@ def filter_proc(proc_list, key):
     return [proc for proc in proc_list if key in proc.cmd]
 
 
-@app.get("/")
+@app.get("/api/datapanel")
 async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/services/{name}")
+@app.get("/api/datapanel/services/{name}")
 async def query_service(name: str):
     if name not in SAFE_LIST:
         content = "you think too much"
@@ -64,7 +64,7 @@ async def query_service(name: str):
     return {"name": name, "services": [service.to_str() for service in services]}
 
 
-@app.get("/rediskeys")
+@app.get("/api/datapanel/rediskeys")
 async def get_redis_keys():
     r = redis.Redis();
     keys = []
