@@ -10,7 +10,7 @@ from pyprocessor import Proc
 
 app = FastAPI()
 
-SAFE_LIST = ["pm2", "redis", "postgres", "uvicorn", "rabbit", "celery", "npm"]
+SAFE_LIST = ["pm2", "redis", "postgres", "uvicorn", "rabbit", "celery", "npm", "nginx"]
 CELERY_TASK = "celery-task-meta"
 FIVE_MINUTES = 300
 origins = [
