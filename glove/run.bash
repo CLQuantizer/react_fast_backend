@@ -1,1 +1,1 @@
-uvicorn glove:glove_app --host=0.0.0.0 --reload --port=8001 &
+uvicorn glove:glove_app --reload --port=8001 &

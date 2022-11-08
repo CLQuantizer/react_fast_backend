@@ -1,1 +1,1 @@
-uvicorn infra:infra --host=0.0.0.0 --reload --port=8002 &
+uvicorn infra:infra --reload --port=8002 &
