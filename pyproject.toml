@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "datapanel"
+name = "react_fastapi_backend"
 version = "0.1.0"
 description = ""
 authors = ["CLQuantizer <ezioxxk@gmail.com>"]
